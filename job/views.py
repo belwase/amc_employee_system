@@ -1,14 +1,28 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from job.models import Job
+from job.models import Job, JobReview, JobRating
 
 def JobList(request):
-	jobs = Job.objects.all()
 	data = {
-		"jobs": jobs
+		"job":None,
+		"jobs":[]
 	}
-	return render(request, "job.html", data)
+
+	if "id" in request.GET:
+		data["job"] = Job.objects.get(
+						id=request.GET["id"]
+						)
+		return render(
+				request, 
+				"job-detail.html", 
+				data
+				)
+	else:
+		data["jobs"] = Job.objects.all()
+		return render(request, "job.html", data)
+
+
 
 @csrf_exempt
 def JobAdd(request):
@@ -60,3 +74,31 @@ def JobAdd(request):
 		except:
 			pass
 	return render(request, "job-add.html", data)
+
+
+
+def JobRatingReview(request):
+	data = {}
+	if request.method == "POST":
+		input_data = request.POST
+		job = Job.objects.get(id=input_data["id"])
+		JobRating.objects.get_or_create(
+				user_id=request.user.id,
+				job_id=job.id,
+				defaults={
+					"rating":input_data["rating"]
+				}
+			)
+		JobReview.objects.get_or_create(
+				user_id=request.user.id,
+				job_id=job.id,
+				defaults={
+					"review":input_data["review"]
+				}
+			)
+		data["job"] = job
+		return render(request, "job-detail.html", data)
+
+	return render(request, "job.html", data)
+
+

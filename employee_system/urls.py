@@ -7,7 +7,7 @@ from django.conf import settings
 from employee.views import HomePage, EmployeeList, \
 EmployeAdd, EmployeDelete
 from employer.views import EmployerList
-from job.views import JobList, JobAdd
+from job.views import JobList, JobAdd, JobRatingReview
 
 from users.views import Register, Login
 
@@ -24,6 +24,8 @@ urlpatterns = [
 
     path('job', JobList),
     path('job-add', JobAdd),
+
+    path('job/rating-review', JobRatingReview)
 
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
