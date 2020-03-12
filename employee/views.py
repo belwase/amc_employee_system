@@ -6,14 +6,47 @@ from django.views.decorators.csrf import csrf_exempt
 from employee.models import Employee
 from employer.models import Employer
 
+from job.models import Job, JobRating
+from job.algo import getRecommendation, euclidean_distance
+
+import pandas as pd
+# jobs = pd.DataFrame(list(Job.objects.all().values()))
+        # ratings = pd.DataFrame(list(
+        #     JobRating.objects.all().values(
+        #         'job__title', 'user__email', 'rating')
+        #     ))
+
 def HomePage(request):
 	employee_count = Employee.objects.count()
 	employer_count = Employer.objects.count()
+
+
+	recommended_jobs = []
+
+	rating_job = {
+		"ratings": pd.DataFrame(list(
+				JobRating.objects.all().values(
+					'job__title', 'user__email', 'rating'
+					)
+			)),
+		"jobs":pd.DataFrame(list(Job.objects.all().values()))
+	}
+	try:
+		recommended_jobs = getRecommendation(
+				rating_job,
+				request.user.email,
+				euclidean_distance
+			)
+	except Exception as ex:
+		print(ex)
+	#print(recommended_jobs)
 	data = {
 		"employee_count": employee_count,
-		"employer_count": employer_count
+		"employer_count": employer_count,
+		"recommended_jobs":recommended_jobs
 	}
 	return render(request, "index.html", data)
+
 
 def EmployeeList(request):
 	employees = Employee.objects.all()
