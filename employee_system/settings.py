@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'channels',
+
     'users',
     'employee',
     'employer',
@@ -132,3 +134,7 @@ STATICFILES_DIRS = [
 
 
 AUTH_USER_MODEL = "users.user"
+
+ASGI_APPLICATION = 'employee_system.routing.application'
+
+

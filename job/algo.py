@@ -12,7 +12,7 @@ def euclidean_distance(person1,person2, ratings):
     
     sum_of_squares=sum(pow((df['rating_x']-df['rating_y']),2))
     r = 1/(1+sum_of_squares)
-    print("euc similarity", r)
+    #print("euc similarity", r)
     return r
 
 def pearson_score(user1, user2, ratings):
@@ -44,7 +44,7 @@ def pearson_score(user1, user2, ratings):
         )
     if denominator==0: return 0
     r=numerator/denominator
-    print("pearson similarity", r)
+    #print("pearson similarity", r)
     return r
 
 def topMatches(personId,n=5,similarity=pearson_score):

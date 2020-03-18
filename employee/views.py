@@ -113,3 +113,14 @@ def EmployeDelete(request):
 	emp = Employee.objects.get(id=id)
 	emp.delete()
 	return redirect("/employee")
+
+
+def ChatRoom(request):
+	data = {
+		"room_name": "Job_Chat_Box"
+	}
+	return render(request, "chat-room.html", data)
+
+
+
+
